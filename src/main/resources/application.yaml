@@ -14,9 +14,6 @@ spring:
       port: ${SPRING_REDIS_PORT:6379}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 management:
   endpoints:

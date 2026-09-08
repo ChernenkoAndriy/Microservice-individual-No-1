@@ -14,6 +14,7 @@ repositories {
 dependencyManagement {
     imports {
         mavenBom("org.testcontainers:testcontainers-bom:1.21.4")
+        mavenBom("org.springframework.modulith:spring-modulith-bom:1.2.1")
     }
 }
 
@@ -24,13 +25,17 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    // Spring Modulith
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+    testImplementation("org.springframework.modulith:spring-modulith-docs")
+
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("org.postgresql:postgresql:42.7.3")
-    implementation("org.liquibase:liquibase-core")
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

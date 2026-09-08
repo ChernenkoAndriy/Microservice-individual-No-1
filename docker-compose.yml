@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   crm-postgres-db:
     image: postgres:16-alpine
@@ -42,9 +40,16 @@ services:
       - "8081:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=stg
+      # Стандартні змінні Spring Boot для БД
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://crm-postgres-db:5432/gym_crm_db
+      - SPRING_DATASOURCE_USERNAME=gym_admin
+      - SPRING_DATASOURCE_PASSWORD=gym_password
       - STG_DB_URL=jdbc:postgresql://crm-postgres-db:5432/gym_crm_db
       - STG_DB_USERNAME=gym_admin
       - STG_DB_PASSWORD=gym_password
+      # Змінні для Redis
+      - SPRING_DATA_REDIS_HOST=crm-redis-cache
+      - SPRING_DATA_REDIS_PORT=6379
       - STG_REDIS_HOST=crm-redis-cache
       - STG_REDIS_PORT=6379
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
