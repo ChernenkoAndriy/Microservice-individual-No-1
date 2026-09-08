@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-users-and-types
+      author: gym_crm_admin
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: first_name, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: last_name, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: username, type: varchar(255), constraints: { nullable: false, unique: true } }
+              - column: { name: password, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: is_active, type: boolean, constraints: { nullable: false } }
+        - createTable:
+            tableName: training_types
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: training_type_name, type: varchar(255), constraints: { nullable: false, unique: true } }
+
+  - changeSet:
+      id: 2-create-trainees-and-trainers
+      author: gym_crm_admin
+      changes:
+        - createTable:
+            tableName: trainees
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: user_id, type: bigint, constraints: { nullable: false, unique: true, foreignKeyName: fk_trainee_user, referencedTableName: users, referencedColumnNames: id, deleteCascade: true } }
+              - column: { name: date_of_birth, type: date }
+              - column: { name: address, type: varchar(255) }
+        - createTable:
+            tableName: trainers
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: user_id, type: bigint, constraints: { nullable: false, unique: true, foreignKeyName: fk_trainer_user, referencedTableName: users, referencedColumnNames: id, deleteCascade: true } }
+              - column: { name: specialization_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_trainer_spec, referencedTableName: training_types, referencedColumnNames: id } }
+
+  - changeSet:
+      id: 3-create-trainings-and-relations
+      author: gym_crm_admin
+      changes:
+        - createTable:
+            tableName: trainings
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: trainee_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_training_trainee, referencedTableName: trainees, referencedColumnNames: id, deleteCascade: true } }
+              - column: { name: trainer_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_training_trainer, referencedTableName: trainers, referencedColumnNames: id, deleteCascade: true } }
+              - column: { name: training_name, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: training_type_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_training_type, referencedTableName: training_types, referencedColumnNames: id } }
+              - column: { name: training_date, type: timestamp, constraints: { nullable: false } }
+              - column: { name: training_duration, type: integer, constraints: { nullable: false } }
+        - createTable:
+            tableName: trainee_trainer
+            columns:
+              - column: { name: trainee_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_tt_trainee, referencedTableName: trainees, referencedColumnNames: id, deleteCascade: true } }
+              - column: { name: trainer_id, type: bigint, constraints: { nullable: false, foreignKeyName: fk_tt_trainer, referencedTableName: trainers, referencedColumnNames: id, deleteCascade: true } }

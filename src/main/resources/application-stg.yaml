@@ -1,0 +1,38 @@
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+      expiration: 86400000
+
+spring:
+  config:
+    activate:
+      on-profile: stg
+  datasource:
+    url: ${STG_DB_URL:jdbc:postgresql://stg-db.gymcrm.internal:5432/gym_crm_stg}
+    username: ${STG_DB_USERNAME:gym_stg_user}
+    password: ${STG_DB_PASSWORD:stg_secure_pass_123}
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: ${STG_REDIS_HOST:stg-redis.gymcrm.internal}
+      port: ${STG_REDIS_PORT:6379}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    root: INFO
+    com.epam.java.specialization.gym_crm: INFO
+    org.hibernate.SQL: WARN

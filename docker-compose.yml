@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  crm-postgres-db:
+    image: postgres:16-alpine
+    container_name: gym_crm_db_service
+    environment:
+      POSTGRES_DB: gym_crm_db
+      POSTGRES_USER: gym_admin
+      POSTGRES_PASSWORD: gym_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - crm_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gym_admin -d gym_crm_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - crm-network
+
+  crm-redis-cache:
+    image: redis:7-alpine
+    container_name: gym_crm_redis_cache
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - crm-network
+
+  crm-backend-app:
+    build: .
+    container_name: gym_crm_backend_app
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=stg
+      - STG_DB_URL=jdbc:postgresql://crm-postgres-db:5432/gym_crm_db
+      - STG_DB_USERNAME=gym_admin
+      - STG_DB_PASSWORD=gym_password
+      - STG_REDIS_HOST=crm-redis-cache
+      - STG_REDIS_PORT=6379
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    depends_on:
+      crm-postgres-db:
+        condition: service_healthy
+      crm-redis-cache:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - crm-network
+
+volumes:
+  crm_pgdata:
+
+networks:
+  crm-network:
+    driver: bridge

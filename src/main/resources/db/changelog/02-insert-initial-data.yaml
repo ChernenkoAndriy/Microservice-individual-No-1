@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4-insert-users-and-types
+      author: gym_crm_admin
+      changes:
+        - insert:
+            tableName: training_types
+            columns:
+              - column: { name: training_type_name, value: "Yoga" }
+        - insert:
+            tableName: training_types
+            columns:
+              - column: { name: training_type_name, value: "Crossfit" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: first_name, value: "Alex" }
+              - column: { name: last_name, value: "Smith" }
+              - column: { name: username, value: "Alex.Smith" }
+              # BCrypt hash for raw password: "staticPass1"
+              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVymGe07xd00DMxs.AQubh4a" }
+              - column: { name: is_active, value: true }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: first_name, value: "John" }
+              - column: { name: last_name, value: "Doe" }
+              - column: { name: username, value: "John.Doe" }
+              # BCrypt hash for raw password: "staticPass2"
+              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVymGe07xd00DMxs.AQubh4a" }
+              - column: { name: is_active, value: true }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: first_name, value: "John" }
+              - column: { name: last_name, value: "Smith" }
+              - column: { name: username, value: "John.Smith" }
+              # BCrypt hash for raw password: "staticPass3"
+              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVymGe07xd00DMxs.AQubh4a" }
+              - column: { name: is_active, value: true }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: first_name, value: "Elena" }
+              - column: { name: last_name, value: "Kostova" }
+              - column: { name: username, value: "Elena.Kostova" }
+              # BCrypt hash for raw password: "staticPass4"
+              - column: { name: password, value: "$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVymGe07xd00DMxs.AQubh4a" }
+              - column: { name: is_active, value: true }
